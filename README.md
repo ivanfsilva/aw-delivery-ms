@@ -68,6 +68,51 @@ graph TD
     CM -. Consumo & Publicação de Eventos .-> Kafka
 ```
 
+### 📐 Diagrama de Classes do Domínio (DDD)
+
+```mermaid
+classDiagram
+    class Delivery {
+        +UUID id
+        +ContactPoint sender
+        +ContactPoint recipient
+        +DeliveryStatus status
+        +BigDecimal totalAmount
+        +List~Item~ items
+        +OffsetDateTime createdAt
+        +place()
+        +pickUp()
+        +fulfill()
+    }
+
+    class Item {
+        +UUID id
+        +String name
+        +Integer quantity
+        +BigDecimal unitPrice
+    }
+
+    class ContactPoint {
+        +String name
+        +String phone
+        +String address
+        +String zipCode
+    }
+
+    class DeliveryStatus {
+        <<enumeration>>
+        DRAFT
+        PLACED
+        PICKED_UP
+        FULFILLED
+        CANCELLED
+    }
+
+    Delivery "1" *-- "1..*" Item : contém
+    Delivery "1" *-- "2" ContactPoint : origem e destino
+    Delivery --> DeliveryStatus : possui status
+```
+
 ### 🧩 Componentes do Ecossistema
 
 * **`Spring Cloud Gateway`:** Ponto único de entrada da aplicação, encarregado de redirecionar e proteger as requisições
