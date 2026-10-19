@@ -52,6 +52,20 @@ A aplicação aborda e implementa:
 
 ---
 
+## 📁 Estrutura do Projeto
+
+```text
+aw-delivery-ms/
+├── backend/                  # Código-fonte dos microsserviços (Spring Boot)
+├── .gitignore                # Regras de ignorados do Git (Java, IDEs, Node)
+├── LICENSE                   # Licença do repositório (MIT)
+├── README.md                 # Documentação principal (Português)
+├── README.en.md              # Documentation (English)
+└── README.es.md              # Documentación (Español)
+```
+
+---
+
 ## 🏛️ Arquitetura da Solução
 
 ```mermaid
