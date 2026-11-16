@@ -11,6 +11,8 @@
 # ==========================================
 *.class
 *.jar
+!**/mvn/wrapper/maven-wrapper.jar
+!**/.mvn/wrapper/maven-wrapper.jar
 *.war
 *.ear
 *.nar
@@ -24,6 +26,15 @@ build/
 out/
 target/
 .gradle/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# ==========================================
+# Arquivos Gerados pelo Spring Initializr
+# ==========================================
+HELP.md
 
 # ==========================================
 # Frontend & Node.js (para a pasta frontend/)
@@ -48,12 +59,16 @@ yarn-error.log*
 *.ipr
 
 # ==========================================
-# Configurações do Eclipse
+# Configurações do Eclipse / STS
 # ==========================================
 .settings/
 .classpath
 .project
 .metadata/
+.apt_generated
+.factorypath
+.springBeans
+.sts4-cache
 
 # ==========================================
 # Configurações do Visual Studio Code
