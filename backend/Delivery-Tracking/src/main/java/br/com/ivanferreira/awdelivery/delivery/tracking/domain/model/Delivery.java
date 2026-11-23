@@ -1,8 +1,12 @@
 package br.com.ivanferreira.awdelivery.delivery.tracking.domain.model;
 
+import br.com.ivanferreira.awdelivery.delivery.tracking.domain.event.DeliveryFulfilledEvent;
+import br.com.ivanferreira.awdelivery.delivery.tracking.domain.event.DeliveryPickUpEvent;
+import br.com.ivanferreira.awdelivery.delivery.tracking.domain.event.DeliveryPlacedEvent;
 import br.com.ivanferreira.awdelivery.delivery.tracking.domain.exception.DomainException;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -13,11 +17,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Setter(AccessLevel.PRIVATE)
 @Getter
-public class Delivery {
+public class Delivery extends AbstractAggregateRoot<Delivery> {
 
     @Id
     @EqualsAndHashCode.Include
@@ -115,17 +119,26 @@ public class Delivery {
         verifyIfCanBePlaced();
         this.changeStatusTo(DeliveryStatus.WAITING_FOR_COURIER);
         this.setPlacedAt(OffsetDateTime.now());
+        super.registerEvent(
+                new DeliveryPlacedEvent(this.getPlacedAt(), this.getId())
+        );
     }
 
     public void pickUp(UUID courierId) {
         this.setCourierId(courierId);
         this.changeStatusTo(DeliveryStatus.IN_TRANSIT);
         this.setAssignedAt(OffsetDateTime.now());
+        super.registerEvent(
+                new DeliveryPickUpEvent(this.getAssignedAt(), this.getId())
+        );
     }
 
     public void markAsDelivered() {
         this.changeStatusTo(DeliveryStatus.DELIVERED);
         this.setFulfilledAt(OffsetDateTime.now());
+        super.registerEvent(
+                new DeliveryFulfilledEvent(this.getFulfilledAt(), this.getId())
+        );
     }
 
     public List<Item> getItems() {
